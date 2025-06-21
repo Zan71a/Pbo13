@@ -1,0 +1,83 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BukuDAO {
+
+    public void tambahBuku(Buku buku) {
+        String sql = "INSERT INTO Buku (judul, pengarang, tahun_terbit, isbn, jumlah_stok) VALUES (?, ?, ?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = KoneksiDatabase.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, buku.getJudul());
+            pstmt.setString(2, buku.getPengarang());
+            pstmt.setInt(3, buku.getTahunTerbit());
+            pstmt.setString(4, buku.getIsbn());
+            pstmt.setInt(5, buku.getJumlahStok());
+            pstmt.executeUpdate();
+            System.out.println("Buku '" + buku.getJudul() + "' berhasil ditambahkan.");
+        } catch (SQLException e) {
+            System.err.println("Gagal menambahkan buku: " + e.getMessage());
+        } finally {
+            KoneksiDatabase.closeConnection(conn);
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    System.err.println("Gagal menutup PreparedStatement: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    public List<Buku> getAllBuku() {
+        List<Buku> daftarBuku = new ArrayList<>();
+        String sql = "SELECT * FROM Buku";
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = KoneksiDatabase.getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                int idBuku = rs.getInt("id_buku");
+                String judul = rs.getString("judul");
+                String pengarang = rs.getString("pengarang");
+                int tahunTerbit = rs.getInt("tahun_terbit");
+                String isbn = rs.getString("isbn");
+                int jumlahStok = rs.getInt("jumlah_stok");
+
+                daftarBuku.add(new Buku(idBuku, judul, pengarang, tahunTerbit, isbn, jumlahStok));
+            }
+        } catch (SQLException e) {
+            System.err.println("Gagal mengambil data buku: " + e.getMessage());
+        } finally {
+            KoneksiDatabase.closeConnection(conn);
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    System.err.println("Gagal menutup Statement: " + e.getMessage());
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    System.err.println("Gagal menutup ResultSet: " + e.getMessage());
+                }
+            }
+        }
+        return daftarBuku;
+    }
+}
