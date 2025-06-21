@@ -1,0 +1,29 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class KoneksiDatabase {
+    private static final String URL = "jdbc:mysql://localhost:3306/perpustakaan_db";
+    private static final String USER = "root";
+    private static final String PASSWORD = "12345678";
+
+    public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            System.err.println("Driver database tidak ditemukan: " + e.getMessage());
+            throw new SQLException("Driver database tidak ditemukan.", e);
+        }
+    }
+
+    public static void closeConnection(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Gagal menutup koneksi database: " + e.getMessage());
+            }
+        }
+    }
+}
