@@ -1,0 +1,60 @@
+public class Buku {
+    private int idBuku;
+    private String judul;
+    private String pengarang;
+    private int tahunTerbit;
+    private String isbn;
+    private int jumlahStok;
+
+    public Buku(String judul, String pengarang, int tahunTerbit, String isbn, int jumlahStok) {
+        this.judul = judul;
+        this.pengarang = pengarang;
+        this.tahunTerbit = tahunTerbit;
+        this.isbn = isbn;
+        this.jumlahStok = jumlahStok;
+    }
+
+    public Buku(int idBuku, String judul, String pengarang, int tahunTerbit, String isbn, int jumlahStok) {
+        this.idBuku = idBuku;
+        this.judul = judul;
+        this.pengarang = pengarang;
+        this.tahunTerbit = tahunTerbit;
+        this.isbn = isbn;
+        this.jumlahStok = jumlahStok;
+    }
+
+    // Getter methods
+    public int getIdBuku() {
+        return idBuku;
+    }
+
+    public String getJudul() {
+        return judul;
+    }
+
+    public String getPengarang() {
+        return pengarang;
+    }
+
+    public int getTahunTerbit() {
+        return tahunTerbit;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public int getJumlahStok() {
+        return jumlahStuk;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + idBuku +
+               ", Judul: " + judul +
+               ", Pengarang: " + pengarang +
+               ", Tahun: " + tahunTerbit +
+               ", ISBN: " + (isbn != null ? isbn : "-") +
+               ", Stok: " + jumlahStok;
+    }
+}
