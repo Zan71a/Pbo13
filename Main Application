@@ -1,0 +1,75 @@
+import java.util.List;
+import java.util.Scanner;
+
+public class PerpustakaanApp {
+    private static BukuDAO bukuDAO = new BukuDAO();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int pilihan;
+        do {
+            tampilkanMenu();
+            System.out.print("Masukkan pilihan Anda: ");
+            pilihan = scanner.nextInt();
+            scanner.nextLine(); // Konsumsi newline
+
+            switch (pilihan) {
+                case 1:
+                    tampilkanDataBuku();
+                    break;
+                case 2:
+                    tambahDataBuku();
+                    break;
+                case 0:
+                    System.out.println("Terima kasih! Aplikasi keluar.");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid. Silakan coba lagi.");
+            }
+            System.out.println("\n---");
+        } while (pilihan != 0);
+
+        scanner.close();
+    }
+
+    private static void tampilkanMenu() {
+        System.out.println("=== Aplikasi Perpustakaan ===");
+        System.out.println("1. Tampilkan Data Buku");
+        System.out.println("2. Tambahkan Data Buku");
+        System.out.println("0. Keluar");
+    }
+
+    private static void tampilkanDataBuku() {
+        System.out.println("\n--- Daftar Buku ---");
+        List<Buku> daftarBuku = bukuDAO.getAllBuku();
+        if (daftarBuku.isEmpty()) {
+            System.out.println("Tidak ada data buku.");
+        } else {
+            for (Buku buku : daftarBuku) {
+                System.out.println(buku);
+            }
+        }
+    }
+
+    private static void tambahDataBuku() {
+        System.out.println("\n--- Tambah Data Buku Baru ---");
+        System.out.print("Judul Buku: ");
+        String judul = scanner.nextLine();
+        System.out.print("Pengarang: ");
+        String pengarang = scanner.nextLine();
+        System.out.print("Tahun Terbit: ");
+        int tahunTerbit = scanner.nextInt();
+        scanner.nextLine(); // Konsumsi newline
+        System.out.print("ISBN (kosongkan jika tidak ada): ");
+        String isbn = scanner.nextLine();
+        if (isbn.isEmpty()) {
+            isbn = null; // Set ke null jika kosong
+        }
+        System.out.print("Jumlah Stok: ");
+        int jumlahStok = scanner.nextInt();
+        scanner.nextLine(); // Konsumsi newline
+
+        Buku bukuBaru = new Buku(judul, pengarang, tahunTerbit, isbn, jumlahStok);
+        bukuDAO.tambahBuku(bukuBaru);
+    }
+}
